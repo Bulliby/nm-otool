@@ -1,114 +1,76 @@
-#include <mach-o/loader.h>
+#include "nmotool.h"
 #include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include "libft.h"
 
-#define MACH_ARCH 4
-typedef struct stat t_stat;
-
-static void		arch_64(int fd)
+static int			map_file(int fd)
 {
-	char			stamp[5];
+	void			*ptr;
+	int				ret;
+	t_stat			st;
 
-	ft_bzero(stamp, 5);
-	read(fd, stamp, 4);
-	if (*(int *)stamp != MH_MAGIC_64)
-		ft_quit("Bad architecture", 2, 42);
-}	
-
-static void			*map_file(char * const path, int *fd)
-{
-	t_stat		st;
-	void		*ret;
-
-	if ((*fd = open(path, O_RDWR)) == -1)
-		ft_quit("open error", 2, 42);
-	arch_64(*fd);
-	if (fstat(*fd, &st) == -1)
-		ft_quit("stat error", 2, 42);
-	if ((ret = mmap(0, st.st_size, PROT_READ, MAP_PRIVATE, *fd, 0)) == MAP_FAILED)
-	   ft_quit("map error2", 2, 42);	
+	ret = EXIT_SUCCESS;
+	if (fstat(fd, &st) < 0)
+	{
+		ft_putendl_fd("fstat error", 2);
+		ret = EXIT_FAILURE;
+	}
+	else 
+	{
+		if ((ptr = mmap(0, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0))\
+		== MAP_FAILED)
+		{
+			ft_putendl_fd("can't mmap", 2);
+			ret = EXIT_FAILURE;
+		}
+		else
+		{
+			//ret = check_arch(ptr);
+			if (munmap(ptr, st.st_size) < 0)
+				ft_putendl_fd("munmap failed", 2);
+		}
+	}
 	return (ret);
 }
 
-static void						ft_put_hexa(unsigned char c, char *base, char baselen)
+static int			open_files(char *file)
 {
-	char						ret;
-	char						modulo;
-
-	ret = c / baselen;
-	modulo = c % baselen;
-	if (modulo > baselen)
-		ft_put_hexa(ret, "0123456789ABCDEF", 16);
-	ft_putchar(base[ret]);
-	ft_putchar(base[modulo]);
+	int				ret;
+	int				fd;
+	
+	ret = EXIT_SUCCESS;
+	if (((fd = open(file, O_RDONLY)) < 0))
+	{
+		ft_putstr("Can't open file : ");
+		ft_putendl(file);
+		ret = EXIT_FAILURE;
+	}
+	else
+	   ret = map_file(fd);
+	return (ret);	
 }
 
-static void						print_text(void *ptr, struct section_64 *sect)
+static int			hanlde_files(char **argv)
 {
-	unsigned char				c;
-	int							i;
-	int							size;
+	int				ret;
 
-	size = sect->size;
-	//printf("size [%i]\n", size);
-	//printf("offset [%i]\n", sect->offset);
-	//size += getpagesize() - (size % getpagesize());
-	printf("addr [%p]\n", (void*)sect->addr);
-	for (i = sect->offset; i < size + sect->offset; i++)
+	ret = EXIT_SUCCESS;
+	argv++;
+	while (*argv)
 	{
-		c = ((char*)ptr)[i];
-		ft_put_hexa(c, "0123456789ABCDEF", 16);
+		if (open_files(*argv) == EXIT_FAILURE)
+			ret = EXIT_FAILURE;
+		argv++;
 	}
-}
-
-static void						get_text(char * const ptr, int fd)
-{
-	struct mach_header_64		*header;
-	int							ncmds;	
-	struct load_command			*cmds;
-	struct segment_command_64	*seg;
-	struct section_64			*sect;
-	int							i;
-	int							x;
-	void						*text;
-	static int					count = 0;
-
-	header = (struct mach_header_64 *) ptr;
-	ncmds = header->ncmds;
-	cmds = (void *)header + sizeof(*header);
-	seg = (struct segment_command_64 *)cmds;	
-	for (i = 0; i != ncmds; i++)
-	{
-		if(seg->cmd == LC_SEGMENT_64 && !ft_strcmp(seg->segname, "__TEXT"))
-		{
-			sect = (void *)seg + sizeof(*seg);
-			for (x = 0; x != seg->nsects; x++)
-			{
-				if (!ft_strcmp(sect->sectname, "__text"))
-				{
-					print_text(ptr, sect);
-					break;
-				}
-			}
-			break ;
-		}	
-		seg = (void *) seg + seg->cmdsize;
-	}
+	return (ret);
 }
 
 int			main(int argc, char **argv)
 {
-	char	*macho;
-	int		fd;
-
-	if (argc != 2)
-		ft_quit("At least one arg", 2, 42);
-	macho = map_file(argv[1], &fd);
-	get_text(macho, fd);
-	return (42);
+	if (argc < 2)
+	{
+		ft_putendl("Enter a file name");
+		return (EXIT_FAILURE);
+	}
+	return (hanlde_files(argv));
 }
