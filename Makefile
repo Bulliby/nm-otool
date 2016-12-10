@@ -26,8 +26,13 @@ CFLAGS		= -Wall -Wextra -Werror
 INCLUDES	= -I./includes
 
 # ***************************OTOOL******************************************** #
-SRCOTOOL	= src/otool/otool.c
-
+COTOOL		= otool.c\
+			  fatheader.c\
+			  header.c\
+			  parse.c\
+			  arch.c
+			 
+SRCOTOOL	= $(addprefix src/otool/, $(COTOOL))
 # ****************************NM********************************************* #
 #SRCNM		= src/nm
 
@@ -35,7 +40,7 @@ SRCOTOOL	= src/otool/otool.c
 
 all: $(OTOOL) #(NM)  
 
-$(OBJ_PATH)%.o: $(OTOOLSRC)%.c
+$(OBJ_PATH)%.o: $(SRCOTOOL)%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
 
 $(OBJ_PATH)%.o: $(NMSRC)%.c

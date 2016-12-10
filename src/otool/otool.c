@@ -1,7 +1,10 @@
-#include "nmotool.h"
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <mach-o/fat.h>
+#include <mach-o/loader.h>
+
+#include "nmotool.h"
 
 static int			map_file(int fd)
 {
@@ -25,7 +28,7 @@ static int			map_file(int fd)
 		}
 		else
 		{
-			//ret = check_arch(ptr);
+			ret = check_arch(ptr);
 			if (munmap(ptr, st.st_size) < 0)
 				ft_putendl_fd("munmap failed", 2);
 		}
