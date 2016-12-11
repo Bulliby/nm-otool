@@ -26,7 +26,7 @@ void			header32(const void * ptr, const t_header32 *header);
 /*
 ** fatheader.c
 */
-void			headerfat(const t_headerfat *header, t_bool islittleendian);
+void			headerfat(const void *ptr, t_bool islittleendian);
 
 /*
 ** parse.c

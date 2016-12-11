@@ -24,32 +24,34 @@ static t_bool	is64bit(void)
 	return (true);	
 }
 
-static void			archfat(const t_headerfat *header, const uint32_t nbarch)
+static void			archfat(const void *ptr, const uint32_t nbarch)
 {
 	t_arch			*arch;
 	uint32_t		i;
 
 	i = 0;
-	arch = (void *)header + sizeof(*header);
+	arch = (void *)ptr + sizeof(t_headerfat);
 	while (i != nbarch)
 	{
 		if (is64bit() && (bigtolitte(arch->cputype) == CPU_TYPE_X86_64 ||\
 		arch->cputype == CPU_TYPE_X86_64))
-			header64((void*)header + arch->offset);
+			header64(ptr, (void*)ptr + bigtolitte(arch->offset));
 		else if (!is64bit() && (arch->cputype == CPU_TYPE_I386 || 
 		bigtolitte(arch->cputype) == CPU_TYPE_I386))
-			header32((void*)header + arch->offset);
+			header32(ptr, (void*)ptr + arch->offset);
+		arch = (void*)arch + sizeof(*arch);
 		i++;
 	}	
 }
 
-void				headerfat(const t_headerfat *header, t_bool islittleendian)
+void				headerfat(const void *ptr, t_bool islittleendian)
 {
 	uint32_t		nbarch;
 
+	printf("FAT\n");
 	if (islittleendian)
-		nbarch = bigtolitte(header->nfat_arch);
+		nbarch = bigtolitte(((t_headerfat *)ptr)->nfat_arch);
 	else
-		nbarch = header->nfat_arch;
-	archfat(header, nbarch);
+		nbarch = ((t_headerfat *)ptr)->nfat_arch;
+	archfat(ptr, nbarch);
 }
