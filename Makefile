@@ -22,8 +22,9 @@ TMPNM		= $(SRCNM:.c=.o)
 OBJOTOOL	= $(addprefix $(OBJ_PATH), $(TMPOTOOL))
 OBJNM		= $(addprefix $(OBJ_PATH), $(TMPNM))
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror 
 INCLUDES	= -I./includes
+LIB			= -L. -lft
 
 # ***************************OTOOL******************************************** #
 COTOOL		= otool.c\
@@ -31,30 +32,31 @@ COTOOL		= otool.c\
 			  header.c\
 			  parse.c\
 			  arch.c
+
 			 
 SRCOTOOL	= $(addprefix src/otool/, $(COTOOL))
+
 # ****************************NM********************************************* #
-#SRCNM		= src/nm
+CNM			= test.c\
+
+SRCNM		= $(addprefix src/nm/, $(CNM))
 
 ###############################################################################
 
-all: $(OTOOL) #(NM)  
+all: $(OTOOL) $(NM)
 
-$(OBJ_PATH)%.o: $(SRCOTOOL)%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
-
-$(OBJ_PATH)%.o: $(NMSRC)%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
-
-$(NM): $(OBJNM)
-	make -C libft
-	cp libft/libft.a . && cp libft/libft.h ./includes
-	$(CC) $(CFLAGS) $(OBJNM) libft.a -o $(NM) 
+$(OBJ_PATH)%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -g -o $@ -c $<
 
 $(OTOOL): $(OBJOTOOL)
 	make -C libft
 	cp libft/libft.a . && cp libft/libft.h ./includes
-	$(CC) $(CFLAGS) $(OBJOTOOL) $(INCLUDES)  libft.a -o $(OTOOL) 
+	$(CC) $(CFLAGS) $(OBJOTOOL) $(LIB) -o $(OTOOL) 
+
+$(NM): $(OBJNM)
+	make -C libft
+	cp libft/libft.a . && cp libft/libft.h ./includes
+	$(CC) $(CFLAGS) $(OBJNM) $(LIB) -o $(NM) 
 
 submodule :
 	git submodule init libft
@@ -63,9 +65,9 @@ submodule :
 	git submodule update --remote nmotool.wiki
 
 clean:
-	rm -rf $(OBJOTOOL) #$(OBJNM)
+	rm -rf $(OBJOTOOL) $(OBJNM)
 
 fclean: clean
-	rm -rf $(OTOOL) a.out #$(NM) 
+	rm -rf $(OTOOL) a.out $(NM) 
 
-re: fclean $(OTOOL) # $(NM)
+re: fclean $(OTOOL) $(NM)

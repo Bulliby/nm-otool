@@ -20,8 +20,8 @@ typedef struct section				t_sect32;
 /*
 ** header.c
 */
-void			header64(const t_header64 *header);
-void			header32(const t_header32 *header);
+void			header64(const void * ptr, const t_header64 *header);
+void			header32(const void * ptr, const t_header32 *header);
 
 /*
 ** fatheader.c
@@ -31,8 +31,8 @@ void			headerfat(const t_headerfat *header, t_bool islittleendian);
 /*
 ** parse.c
 */
-void			parse32(const uint32_t ncmds, const t_seg32 *seg);
-void			parse64(const uint32_t ncmds, const t_seg64 *sef);
+void			parse32(const void * ptr, const uint32_t ncmds, const t_seg32 *seg);
+void			parse64(const void * ptr, const uint32_t ncmds, const t_seg64 *sef);
 
 /*
 ** arch.c
