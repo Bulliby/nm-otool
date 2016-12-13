@@ -12,7 +12,7 @@ static void			section32(const void * ptr, const uint32_t nsects, \
 		{
 			ft_puthexa((void *)ptr + sect->offset, sect->size); 
 		}
-		sect += sect->size;
+		sect++;
 		x++;
 	}
 
@@ -51,7 +51,7 @@ static void			section64(const void * ptr, const uint32_t nsects,\
 		{
 			ft_puthexa((void *)ptr + sect->offset, sect->size); 
 		}
-		sect += sect->size;
+		sect++;
 		x++;
 	}
 
@@ -69,7 +69,6 @@ void				parse64(const void * ptr, const uint32_t ncmds,\
 	{
 		if (seg->cmd == LC_SEGMENT_64 && !ft_strcmp(seg->segname, "__TEXT"))
 		{
-			printf("TOTO\n");
 			nsect = seg->nsects;
 			sect = (void *)seg + sizeof(*seg);
 			section64(ptr, nsect, sect);

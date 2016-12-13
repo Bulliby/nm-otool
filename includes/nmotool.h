@@ -20,8 +20,8 @@ typedef struct section				t_sect32;
 /*
 ** header.c
 */
-void			header64(const void * ptr, const t_header64 *header);
-void			header32(const void * ptr, const t_header32 *header);
+void			header64(const t_header64 *header);
+void			header32(const t_header32 *header);
 
 /*
 ** fatheader.c
