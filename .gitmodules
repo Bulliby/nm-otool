@@ -2,7 +2,3 @@
 	path = libft
 	url = https://github.com/Bulliby/libft.git
 	branch = master
-[submodule "nm-otool.wiki"]
-	path = nm-otool.wiki
-	url = https://github.com/Bulliby/nm-otool.wiki.git
-	branch = master
