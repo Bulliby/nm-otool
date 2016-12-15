@@ -5,7 +5,7 @@ static void			put_ptr32(uint64_t *vmaddr)
 	size_t		len;
 
 	len = nbrlen(*vmaddr, BASE);
-	len = BASE / 2 - len;
+	len = (BASE >> 1) - len;
 	ft_putnchar('0', len);
 	ft_putnbrbase(*vmaddr, "0123456789abcdef", BASE);
 	*vmaddr += BASE;
