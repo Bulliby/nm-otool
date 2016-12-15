@@ -6,7 +6,7 @@
 #    By: gwells <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/10/07 20:20:41 by gwells            #+#    #+#              #
-#    Updated: 2016/10/21 20:20:09 by gwells           ###   ########.fr        #
+#    Updated: 2016/12/14 14:56:25 by gwells           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,8 +62,8 @@ $(NM): $(OBJNM)
 submodule :
 	git submodule init libft
 	git submodule update --remote libft
-	git submodule init nmotool.wiki
-	git submodule update --remote nmotool.wiki
+	git submodule init nm-otool.wiki
+	git submodule update --remote nm-otool.wiki
 
 clean:
 	rm -rf $(OBJOTOOL) $(OBJNM)
