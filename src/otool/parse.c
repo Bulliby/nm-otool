@@ -1,5 +1,4 @@
 #include "nmotool.h"
-#include <inttypes.h>// to remove
 
 static void			section32(const void * ptr, const uint32_t nsects, \
 					const t_sect32 *sect)
@@ -11,7 +10,6 @@ static void			section32(const void * ptr, const uint32_t nsects, \
 	{
 		if (!ft_strcmp(sect->sectname, "__text"))
 		{
-			//ft_puthexa((void *)ptr + sect->offset, sect->size); 
 			print_section32((void *)ptr + sect->offset, sect->size, \
 			sect->addr); 
 		}
@@ -52,11 +50,8 @@ static void			section64(const void * ptr, const uint32_t nsects,\
 	{
 		if (!ft_strcmp(sect->sectname, "__text"))
 		{
-			//printf("vm addr %" PRIu64 "\n", sect->addr);
 			print_section64((void *)ptr + sect->offset, sect->size,\
 			sect->addr); 
-			//ft_puthexa((void *)ptr + sect->offset, sect->size); 
-			//put_hexa((void *)ptr + sect->offset, 16);
 		}
 		sect++;
 		x++;

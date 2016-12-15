@@ -18,6 +18,10 @@ typedef struct segment_command_64	t_seg64;
 typedef struct segment_command		t_seg32; 
 typedef struct section_64			t_sect64;
 typedef struct section				t_sect32;
+typedef struct load_command			t_lc;
+typedef struct symtab_command		t_symtab;
+typedef	struct nlist_64				t_nlist64;
+typedef	struct nlist				t_nlist32;
 
 /*
 ** header.c
@@ -35,6 +39,8 @@ void			headerfat(const void *ptr, t_bool islittleendian);
 */
 void			parse32(const void * ptr, const uint32_t ncmds, const t_seg32 *seg);
 void			parse64(const void * ptr, const uint32_t ncmds, const t_seg64 *sef);
+void			parse32nm(const void * ptr, const uint32_t ncmds, const t_lc *lc);
+void			parse64nm(const void * ptr, const uint32_t ncmds, const t_lc *lc);
 
 /*
 ** arch.c
@@ -48,9 +54,16 @@ void			print_section64(const void *ptr, size_t size,\
 				uint64_t vmaddr);
 void			print_section32(const void *ptr, size_t size,\
 				uint64_t vmaddr);
+void			print_tab_info64(const void *ptr, const t_symtab *symtab);
 /*
 ** print_tools.c
 */
 void			put_hexa(const void *ptri, size_t nbbytes);
 size_t			nbrlen(uint64_t nbr, size_t base);
+
+/*
+** arch_tools.c
+*/
+uint32_t		bigtolitte(uint32_t value);
+t_bool			is64bit(void);
 #endif

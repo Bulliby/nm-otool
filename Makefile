@@ -19,12 +19,19 @@ $(shell mkdir -p .obj/src/nm 2> /dev/null)
 OBJ_PATH	= .obj/
 TMPOTOOL	= $(SRCOTOOL:.c=.o)
 TMPNM		= $(SRCNM:.c=.o)
+TMPNMOTOOL	= $(SRCNMOTOOL:.c=.o)
 OBJOTOOL	= $(addprefix $(OBJ_PATH), $(TMPOTOOL))
 OBJNM		= $(addprefix $(OBJ_PATH), $(TMPNM))
+OBJNMOTOOL	= $(addprefix $(OBJ_PATH), $(TMPNMOTOOL))
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror 
+CFLAGS		= #-Wall -Wextra -Werror 
 INCLUDES	= -I./includes
 LIB			= -L. -lft
+
+# ***************************NMOTOOL******************************************** #
+CNMOTOOL	= arch_tools.c\
+
+SRCNMOTOOL	= $(addprefix src/, $(CNMOTOOL))
 
 # ***************************OTOOL******************************************** #
 COTOOL		= otool.c\
@@ -38,7 +45,12 @@ COTOOL		= otool.c\
 SRCOTOOL	= $(addprefix src/otool/, $(COTOOL))
 
 # ****************************NM********************************************* #
-CNM			= test.c\
+CNM			= arch.c\
+			  fatheader.c\
+			  header.c\
+			  nm.c\
+			  parse.c\
+			  print.c\
 
 SRCNM		= $(addprefix src/nm/, $(CNM))
 
@@ -49,15 +61,15 @@ all: $(OTOOL) $(NM)
 $(OBJ_PATH)%.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -g -o $@ -c $<
 
-$(OTOOL): $(OBJOTOOL)
+$(OTOOL): $(OBJOTOOL) $(OBJNMOTOOL)
 	make -C libft
 	cp libft/libft.a . && cp libft/libft.h ./includes
-	$(CC) $(CFLAGS) $(OBJOTOOL) $(LIB) -o $(OTOOL) 
+	$(CC) $(CFLAGS) $(OBJOTOOL) $(OBJNMOTOOL) $(LIB) -o $(OTOOL) 
 
-$(NM): $(OBJNM)
+$(NM): $(OBJNM) $(OBJNMOTOOL)
 	make -C libft
 	cp libft/libft.a . && cp libft/libft.h ./includes
-	$(CC) $(CFLAGS) $(OBJNM) $(LIB) -o $(NM) 
+	$(CC) $(CFLAGS) $(OBJNM) $(OBJNMOTOOL) $(LIB) -o $(NM) 
 
 submodule :
 	git submodule init libft
