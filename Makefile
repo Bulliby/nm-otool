@@ -22,7 +22,7 @@ TMPNM		= $(SRCNM:.c=.o)
 OBJOTOOL	= $(addprefix $(OBJ_PATH), $(TMPOTOOL))
 OBJNM		= $(addprefix $(OBJ_PATH), $(TMPNM))
 CC			= gcc
-CFLAGS		= #-Wall -Wextra -Werror 
+CFLAGS		= -Wall -Wextra -Werror 
 INCLUDES	= -I./includes
 LIB			= -L. -lft
 
@@ -31,8 +31,9 @@ COTOOL		= otool.c\
 			  fatheader.c\
 			  header.c\
 			  parse.c\
-			  arch.c
-
+			  arch.c\
+			  print.c\
+			  print_tools.c
 			 
 SRCOTOOL	= $(addprefix src/otool/, $(COTOOL))
 

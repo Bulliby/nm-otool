@@ -7,6 +7,8 @@
 #include <mach-o/fat.h>
 #include <mach-o/loader.h>
 
+#define BASE 16
+
 typedef struct stat					t_stat;
 typedef struct mach_header_64		t_header64;
 typedef struct mach_header			t_header32;
@@ -38,4 +40,17 @@ void			parse64(const void * ptr, const uint32_t ncmds, const t_seg64 *sef);
 ** arch.c
 */
 int				check_arch(const void *ptr);
+
+/*
+** print.c
+*/
+void			print_section64(const void *ptr, size_t size,\
+				uint64_t vmaddr);
+void			print_section32(const void *ptr, size_t size,\
+				uint64_t vmaddr);
+/*
+** print_tools.c
+*/
+void			put_hexa(const void *ptri, size_t nbbytes);
+size_t			nbrlen(uint64_t nbr, size_t base);
 #endif
