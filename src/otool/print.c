@@ -1,42 +1,51 @@
 #include "nmotool.h"
 
-static void			base(unsigned char c)
+static void			put_ptr32(uint64_t *vmaddr)
 {
-	char			ret;
-	char			modulo;
-	char			stamp[BASE];
+	size_t		len;
 
-	ft_strcpy(stamp, "0123456789abcdef");
-	ret = c / BASE;
-	modulo = c % BASE;
-	if (modulo > BASE)
-		base(ret);
-	ft_putchar(stamp[(int)ret]);
-	ft_putchar(stamp[(int)modulo]);
+	len = nbrlen(*vmaddr, BASE);
+	len = (BASE >> 1) - len;
+	ft_putnchar('0', len);
+	ft_putnbrbase(*vmaddr, "0123456789abcdef", BASE);
+	*vmaddr += BASE;
 }
 
-void			put_hexa(const void *ptr, size_t nbbytes)
+static void			put_ptr64(uint64_t *vmaddr)
 {
-	while (nbbytes--)
-	{
-		ft_putchar(' ');
-		base(*(unsigned char *)ptr);
-		ptr++;
-	}	
-	ft_putchar(' ');
-	ft_putchar('\n');
+	size_t		len;
+
+	len = nbrlen(*vmaddr, BASE);
+	len = BASE - len;
+	ft_putnchar('0', len);
+	ft_putnbrbase(*vmaddr, "0123456789abcdef", BASE);
+	*vmaddr += BASE;
 }
 
-size_t			nbrlen(uint64_t nbr, size_t base)
+void			print_section32(const void *ptr, size_t size,\
+				uint64_t vmaddr)
 {
-	size_t count;
-
-	count = 0;
-	while (nbr >= base)
+	while (size > BASE)
 	{
-		nbr /= base;
-		count++;
+		put_ptr32(&vmaddr);
+		put_hexa(ptr, BASE);
+		ptr+=BASE;
+		size-=BASE;
 	}
-	count++;
-	return (count);
+	put_ptr32(&vmaddr);
+	put_hexa(ptr, size);
+}
+
+void			print_section64(const void *ptr, size_t size,\
+				uint64_t vmaddr)
+{
+	while (size > BASE)
+	{
+		put_ptr64(&vmaddr);
+		put_hexa(ptr, BASE);
+		ptr+=BASE;
+		size-=BASE;
+	}
+	put_ptr64(&vmaddr);
+	put_hexa(ptr, size);
 }

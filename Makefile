@@ -30,6 +30,7 @@ LIB			= -L. -lft
 
 # ***************************NMOTOOL******************************************** #
 CNMOTOOL	= arch_tools.c\
+			  print_tools.c\
 
 SRCNMOTOOL	= $(addprefix src/, $(CNMOTOOL))
 
@@ -40,7 +41,6 @@ COTOOL		= otool.c\
 			  parse.c\
 			  arch.c\
 			  print.c\
-			  print_tools.c
 			 
 SRCOTOOL	= $(addprefix src/otool/, $(COTOOL))
 
@@ -51,6 +51,9 @@ CNM			= arch.c\
 			  nm.c\
 			  parse.c\
 			  print.c\
+			  ptrfunc.c\
+			  ptrsym.c\
+			  ptrsymsect.c\
 
 SRCNM		= $(addprefix src/nm/, $(CNM))
 
