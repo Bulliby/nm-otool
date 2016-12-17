@@ -39,7 +39,7 @@ typedef	struct	nlist				t_nlist32;
 
 typedef struct	s_argfunc
 {
-	t_lc		*lc;
+	const t_lc	*lc;
 	t_nlist64	*nlist64;
 	t_nlist32	*nlist32;
 	void		*stringtable;
