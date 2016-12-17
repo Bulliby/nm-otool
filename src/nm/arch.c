@@ -1,6 +1,6 @@
 #include "nmotool.h"
 
-static int			magic_key(const void *ptr, uint32_t cigam, uint32_t magic)
+static int			magic_key(void *ptr, uint32_t cigam, uint32_t magic)
 {
 	if ((!ft_memcmp(ptr, &cigam, sizeof(uint32_t)) || 
 	!ft_memcmp(ptr, &magic, sizeof(uint32_t))) && cigam == MH_CIGAM)

@@ -18,6 +18,39 @@ static void				parse_nlist64(t_argfunc *arg, t_ptrsymbols *ptrsym)
 	}
 }
 
+void				swap(t_nlist64 *tab, size_t index)
+{
+	t_nlist64		tmp;
+
+	tmp = tab[index];	
+	tab[index] = tab[index + 1];
+	tab[index + 1] = tmp;
+
+}
+
+void				sort_nlist(t_nlist64 *tab, char *stringtable,  uint32_t nsyms)
+{
+	t_bool			stop;
+	size_t			i;
+
+	stop = false;
+	while (!stop)
+	{
+		i = 0;
+		stop = true;
+		while (i != nsyms - 1)
+		{
+			if (ft_strcmp(stringtable + tab[i].n_un.n_strx,\
+			stringtable + tab[i + 1].n_un.n_strx) > 0)
+			{
+				swap(tab, i);
+				stop = false;
+			}
+			i++;
+		}
+	}
+}
+
 void				print_tab_info64(const void *ptr, const t_symtab *symtab,\
 					const t_lc *lc, uint32_t ncmds)
 {
@@ -32,6 +65,7 @@ void				print_tab_info64(const void *ptr, const t_symtab *symtab,\
 	arg.ncmds = ncmds;
 	arg.lc = lc;
 	setupptrsym(ptrsym);
+	sort_nlist(arg.nlist64, arg.stringtable, symtab->nsyms);
 	while (i != symtab->nsyms)
 	{
 		arg.ext = ((arg.nlist64->n_type & N_EXT) == N_EXT);
