@@ -11,10 +11,10 @@ static t_bool		search_for_sect(const char *sect, const t_lc *lc,\
 	lc  = (void *) lc + sizeof(t_seg64);
 	while (x != nsects)
 	{
-		(*count)++;
 		if (*count == index && !ft_strcmp(sect, ((t_sect64 *)lc)->sectname))
 			return true;
 		lc = (void *) lc + sizeof(t_sect64);
+		(*count)++;
 		x++;
 	}		
 	return false;
@@ -30,16 +30,14 @@ t_bool	through_seg(t_argfunc *arg, const char *sect, uint8_t index)
 	const t_lc	*tmp;
 
 	i = 0;
-	count = 0;
+	count = 1;
 	ret = false;
 	tmp = arg->lc;
 	while (i != arg->ncmds)
 	{
 		if (tmp->cmd == LC_SEGMENT || tmp->cmd == LC_SEGMENT_64)
-		{
 			if ((ret = search_for_sect(sect, tmp, index, &count)) == true)
 				break;
-		}
 		tmp = (void *) tmp + tmp->cmdsize;
 		i++;
 	}
@@ -59,10 +57,10 @@ void		text(t_argfunc	*arg)
 void		bbs(t_argfunc	*arg)
 {
 	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT && \
-	through_seg(arg, "__bbs", arg->nlist64->n_sect) == true)
+	through_seg(arg, "__bss", arg->nlist64->n_sect) == true)
 		print_type64('b', arg);
 	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
-	through_seg(arg, "__bbs", arg->nlist32->n_sect) == true)
+	through_seg(arg, "__bss", arg->nlist32->n_sect) == true)
 		print_type32('b', arg);
 }	
 

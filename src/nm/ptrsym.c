@@ -1,6 +1,6 @@
 #include "nmotool.h"
 
-static t_bool	is_other_section(t_argfunc *arg)
+static t_bool	in_other_section(t_argfunc *arg)
 {
 	if (arg->nlist64 && (through_seg(arg, "__text", arg->nlist64->n_sect)\
 	|| through_seg(arg, "__bss", arg->nlist64->n_sect)\
@@ -41,10 +41,10 @@ void		common(t_argfunc	*arg)
 
 void		other(t_argfunc	*arg)
 {
-	if (arg->nlist64 && !is_other_section(arg) && (arg->nlist64->n_type\
+	if (arg->nlist64 && !in_other_section(arg) && (arg->nlist64->n_type\
 	& N_TYPE) == N_SECT)
 		print_type64('s', arg);
-	if (arg->nlist32 && !is_other_section(arg) && (arg->nlist32->n_type\
+	if (arg->nlist32 && !in_other_section(arg) && (arg->nlist32->n_type\
 	& N_TYPE) == N_SECT)
-		print_type64('s', arg);
+		print_type32('s', arg);
 }	
