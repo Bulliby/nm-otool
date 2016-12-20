@@ -20,8 +20,8 @@ static int			map_file(int fd)
 	}
 	else 
 	{
-		if ((ptr = mmap(0, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0))\
-		== MAP_FAILED)
+		if ((ptr = mmap(0, st.st_size, PROT_READ | PROT_WRITE,\
+		MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		{
 			ft_putendl_fd("can't mmap", 2);
 			ret = EXIT_FAILURE;

@@ -70,5 +70,28 @@ void		common(t_argfunc	*arg)
 
 void		other(t_argfunc	*arg)
 {
-	printf("other\n");
+	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT &&\
+	 !through_seg("__data", arg->lc, arg->nlist64->n_sect, arg->ncmds)
+	 && !through_seg("__text", arg->lc, arg->nlist64->n_sect, arg->ncmds)
+	 &&	!through_seg("__bss", arg->lc, arg->nlist64->n_sect, arg->ncmds))
+	{
+		print_addr(arg->nlist64, arg->nlist32);
+		if (!arg->ext)
+			ft_putstr("s ");
+		else
+			ft_putstr("S ");
+		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
+	}
+	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
+	 !through_seg("__data", arg->lc, arg->nlist64->n_sect, arg->ncmds)
+	 && !through_seg("__text", arg->lc, arg->nlist64->n_sect, arg->ncmds)
+	 &&	!through_seg("__bss", arg->lc, arg->nlist64->n_sect, arg->ncmds))
+	{
+		print_addr(arg->nlist64, arg->nlist32);
+		if (!arg->ext)
+			ft_putstr("s ");
+		else
+			ft_putstr("S ");
+		ft_putendl(arg->stringtable + arg->nlist32->n_un.n_strx);
+	}
 }	

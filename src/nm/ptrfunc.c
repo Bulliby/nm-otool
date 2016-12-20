@@ -42,3 +42,14 @@ void		print_addr(t_nlist64 *nlist64, t_nlist32 *nlist32)
 	}
 	ft_putchar(' ');
 }
+
+t_bool				is_stab(uint8_t n_type)
+{
+	uint8_t			bit;
+
+	bit = 0x80;
+	if (n_type & bit || n_type & (bit >> 1) || n_type & (bit >> 2))
+		return (true);
+	return (false);
+}
+
