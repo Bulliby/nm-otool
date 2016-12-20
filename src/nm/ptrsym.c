@@ -35,7 +35,7 @@ void		common(t_argfunc	*arg)
 	arg->nlist64->n_value)
 		print_type64('c', arg);
 	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_UNDF &&\
-	arg->nlist64->n_value)
+	arg->nlist32->n_value)
 		print_type32('c', arg);
 }	
 

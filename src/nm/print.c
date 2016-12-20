@@ -1,7 +1,7 @@
 #include "nmotool.h"
 #include <mach-o/nlist.h>
 
-static void				parse_nlist64(t_argfunc *arg, t_ptrsymbols *ptrsym)
+static void				parse_nlist(t_argfunc *arg, t_ptrsymbols *ptrsym)
 {
 	size_t				i;
 
@@ -10,41 +10,6 @@ static void				parse_nlist64(t_argfunc *arg, t_ptrsymbols *ptrsym)
 	{
 		ptrsym[i](arg);
 		i++;
-	}
-}
-
-void				swap(t_nlist64 *tab, size_t index)
-{
-	t_nlist64		tmp;
-
-	tmp = tab[index];	
-	tab[index] = tab[index + 1];
-	tab[index + 1] = tmp;
-
-}
-
-void				sort_nlist(t_nlist64 *tab, char *stringtable,  uint32_t nsyms)
-{
-	t_bool			stop;
-	size_t			i;
-
-	stop = false;
-	while (!stop)
-	{
-		i = 0;
-		stop = true;
-		while (i != nsyms - 1)
-		{
-			if (ft_strcmp(stringtable + tab[i].n_un.n_strx, stringtable +\
-			tab[i + 1].n_un.n_strx) > 0 /*|| (ft_strcmp(stringtable + tab[i]\
-			.n_un.n_strx, stringtable + tab[i + 1].n_un.n_strx) == 0 &&\
-			tab[i].n_value > tab[i + 1].n_value)*/)
-			{
-				swap(tab, i);
-				stop = false;
-			}
-			i++;
-		}
 	}
 }
 
@@ -62,29 +27,37 @@ void				print_tab_info64(const void *ptr, const t_symtab *symtab,\
 	arg.ncmds = ncmds;
 	arg.lc = lc;
 	setupptrsym(ptrsym);
-	sort_nlist(arg.nlist64, arg.stringtable, symtab->nsyms);
+	sort_nlist64(arg.nlist64, arg.stringtable, symtab->nsyms);
 	while (i != symtab->nsyms)
 	{
 		//printf("[%s]\n", (char *)arg.stringtable + arg.nlist64->n_un.n_strx);
 		arg.ext = ((arg.nlist64->n_type & N_EXT) == N_EXT);
-		parse_nlist64(&arg, ptrsym);
+		parse_nlist(&arg, ptrsym);
 		arg.nlist64++;
 		i++;
 	}
 }
 
-void			print_tab_info32(const void *ptr, const t_symtab *symtab,\
-				const t_lc *lc, uint32_t ncmds)
+void				print_tab_info32(const void *ptr, const t_symtab *symtab,\
+					const t_lc *lc, uint32_t ncmds)
 {
-	size_t		i;
-	t_nlist32	*nlist;
-	char		*stringtable;
+	size_t			i;
+	t_argfunc		arg;
+	t_ptrsymbols	ptrsym[SYMBOLS];
 
 	i = 0;
-	nlist = (void *) ptr + symtab->symoff;
-	stringtable = (void *) ptr + symtab->stroff;
+	arg.nlist32 = (void *) ptr + symtab->symoff;
+	arg.stringtable = (void *) ptr + symtab->stroff;
+	arg.nlist64 = NULL;
+	arg.ncmds = ncmds;
+	arg.lc = lc;
+	setupptrsym(ptrsym);
+	sort_nlist32(arg.nlist32, arg.stringtable, symtab->nsyms);
 	while (i != symtab->nsyms)
 	{
+		arg.ext = ((arg.nlist32->n_type & N_EXT) == N_EXT);
+		parse_nlist(&arg, ptrsym);
+		arg.nlist32++;
 		i++;
 	}
 }

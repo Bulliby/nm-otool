@@ -27,7 +27,7 @@ void		print_addr(t_nlist64 *nlist64, t_nlist32 *nlist32)
 		if (!nlist32->n_value)
 			ft_putnchar(' ', 8);
 		else
-			put_ptr(nlist64->n_value, false);
+			put_ptr(nlist32->n_value, false);
 	}
 	ft_putchar(' ');
 }

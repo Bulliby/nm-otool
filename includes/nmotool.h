@@ -120,4 +120,10 @@ size_t			nbrlen(uint64_t nbr, size_t base);
 */
 uint32_t		bigtolitte(uint32_t value);
 t_bool			is64bit(void);
+
+/*
+** sort.c
+*/
+void			sort_nlist64(t_nlist64 *tab, char *stringtable,  uint32_t nsyms);
+void			sort_nlist32(t_nlist32 *tab, char *stringtable,  uint32_t nsyms);
 #endif

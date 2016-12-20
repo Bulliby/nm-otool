@@ -55,6 +55,8 @@ CNM			= arch.c\
 			  ptrfunc.c\
 			  ptrsym.c\
 			  ptrsymsect.c\
+			  through_seg.c\
+			  sort.c\
 
 SRCNM		= $(addprefix src/nm/, $(CNM))
 
