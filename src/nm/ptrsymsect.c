@@ -1,10 +1,13 @@
 #include "nmotool.h"
 
-static t_bool		search_for_sect(const char *sect, const t_lc *lc, uint8_t index, const uint32_t nsects, uint8_t *count)
+static t_bool		search_for_sect(const char *sect, const t_lc *lc,\
+					uint8_t index, uint8_t *count)
 {
 	uint32_t		x;
+	uint32_t		nsects;
 
 	x = 0;
+	nsects = ((t_seg64*)lc)->nsects;
 	lc  = (void *) lc + sizeof(t_seg64);
 	while (x != nsects)
 	{
@@ -19,26 +22,25 @@ static t_bool		search_for_sect(const char *sect, const t_lc *lc, uint8_t index, 
 
 
 
-t_bool	through_seg(const char *sect, const t_lc *lc, uint8_t index,\
-		uint32_t ncmds)
+t_bool	through_seg(t_argfunc *arg, const char *sect, uint8_t index)
 {
 	uint32_t	i;
 	t_bool		ret;
-	uint32_t	nsects;
 	uint8_t		count;
+	const t_lc	*tmp;
 
 	i = 0;
 	count = 0;
 	ret = false;
-	while (i != ncmds)
+	tmp = arg->lc;
+	while (i != arg->ncmds)
 	{
-		if (lc->cmd == LC_SEGMENT || lc->cmd == LC_SEGMENT_64)
+		if (tmp->cmd == LC_SEGMENT || tmp->cmd == LC_SEGMENT_64)
 		{
-			nsects = ((t_seg64*)lc)->nsects;
-			if ((ret = search_for_sect(sect, lc, index, nsects, &count)) == true)
+			if ((ret = search_for_sect(sect, tmp, index, &count)) == true)
 				break;
 		}
-		lc = (void *) lc + lc->cmdsize;
+		tmp = (void *) tmp + tmp->cmdsize;
 		i++;
 	}
 	return (ret);
@@ -46,74 +48,30 @@ t_bool	through_seg(const char *sect, const t_lc *lc, uint8_t index,\
 
 void		text(t_argfunc	*arg)
 {
-	if (arg->nlist64 && !is_stab(arg->nlist64->n_type) && (arg->nlist64->n_type\
-	& N_TYPE) == N_SECT && through_seg("__text", arg->lc, arg->nlist64->n_sect,\
-	arg->ncmds) == true)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("t ");
-		else
-			ft_putstr("T ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
-			through_seg("__text", arg->lc, arg->nlist32->n_sect, arg->ncmds) == true)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("t ");
-		else
-			ft_putstr("T ");
-		ft_putendl(arg->stringtable + arg->nlist32->n_un.n_strx);
-	}
-}	
+	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT && \
+	through_seg(arg, "__text", arg->nlist64->n_sect) == true)
+		print_type64('t', arg);
+	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
+	through_seg(arg, "__text", arg->nlist32->n_sect) == true)
+		print_type32('t', arg);
+}
 
 void		bbs(t_argfunc	*arg)
 {
-	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT &&\
-	 through_seg("__bbs", arg->lc, arg->nlist64->n_sect, arg->ncmds) == true)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("b ");
-		else
-			ft_putstr("B ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
-			through_seg("__bbs", arg->lc, arg->nlist32->n_sect, arg->ncmds) == true)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("b ");
-		else
-			ft_putstr("B ");
-		ft_putendl(arg->stringtable + arg->nlist32->n_un.n_strx);
-	}
+	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT && \
+	through_seg(arg, "__bbs", arg->nlist64->n_sect) == true)
+		print_type64('b', arg);
+	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
+	through_seg(arg, "__bbs", arg->nlist32->n_sect) == true)
+		print_type32('b', arg);
 }	
 
 void		data(t_argfunc	*arg)
 {
-	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT &&\
-	 through_seg("__data", arg->lc, arg->nlist64->n_sect, arg->ncmds) == true)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("d ");
-		else
-			ft_putstr("D ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
-			through_seg("__data", arg->lc, arg->nlist32->n_sect, arg->ncmds) == true)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("d ");
-		else
-			ft_putstr("D ");
-		ft_putendl(arg->stringtable + arg->nlist32->n_un.n_strx);
-	}
+	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT && \
+	through_seg(arg, "__data", arg->nlist64->n_sect) == true)
+		print_type64('d', arg);
+	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
+	through_seg(arg, "__data", arg->nlist32->n_sect) == true)
+		print_type32('d', arg);
 }	
-

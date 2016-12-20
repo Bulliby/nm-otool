@@ -21,4 +21,3 @@ void			header32(const t_header32 *header)
 	lc = (void *)header + sizeof(*header);
 	parse32nm(header, ncmds, lc);
 }
-

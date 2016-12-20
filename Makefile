@@ -51,6 +51,7 @@ CNM			= arch.c\
 			  nm.c\
 			  parse.c\
 			  print.c\
+			  printaddr.c\
 			  ptrfunc.c\
 			  ptrsym.c\
 			  ptrsymsect.c\

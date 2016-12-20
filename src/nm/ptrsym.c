@@ -1,97 +1,50 @@
 #include "nmotool.h"
 
+static t_bool	is_other_section(t_argfunc *arg)
+{
+	if (arg->nlist64 && (through_seg(arg, "__text", arg->nlist64->n_sect)\
+	|| through_seg(arg, "__bss", arg->nlist64->n_sect)\
+	|| through_seg(arg, "__data", arg->nlist64->n_sect)))
+		return (true);
+	if (arg->nlist32 && (through_seg(arg, "__text", arg->nlist32->n_sect)\
+	|| through_seg(arg, "__bss", arg->nlist32->n_sect)\
+	|| through_seg(arg, "__data", arg->nlist32->n_sect)))
+		return (true);
+	return (false);
+}
+
 void		undefined(t_argfunc	*arg)
 {
 	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_UNDF)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("u ");
-		else
-			ft_putstr("U ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_UNDF)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("u ");
-		else
-			ft_putstr("U ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
+		print_type64('u', arg);
+	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_UNDF)
+		print_type32('u', arg);
 }	
 
 void		absolute(t_argfunc	*arg)
 {
 	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_ABS)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("a ");
-		else
-			ft_putstr("A ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_ABS)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("a ");
-		else
-			ft_putstr("A ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
+		print_type64('a', arg);
+	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_ABS)
+		print_type32('a', arg);
 }	
 
 void		common(t_argfunc	*arg)
 {
 	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_UNDF &&\
-		arg->nlist64->n_value)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("c ");
-		else
-			ft_putstr("C ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_UNDF &&\
-			arg->nlist32->n_value)
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("c ");
-		else
-			ft_putstr("C ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
+	arg->nlist64->n_value)
+		print_type64('c', arg);
+	if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_UNDF &&\
+	arg->nlist64->n_value)
+		print_type32('c', arg);
 }	
 
 void		other(t_argfunc	*arg)
 {
-	if (arg->nlist64 && (arg->nlist64->n_type & N_TYPE) == N_SECT &&\
-	 !through_seg("__data", arg->lc, arg->nlist64->n_sect, arg->ncmds)
-	 && !through_seg("__text", arg->lc, arg->nlist64->n_sect, arg->ncmds)
-	 &&	!through_seg("__bss", arg->lc, arg->nlist64->n_sect, arg->ncmds))
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("s ");
-		else
-			ft_putstr("S ");
-		ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
-	}
-	else if (arg->nlist32 && (arg->nlist32->n_type & N_TYPE) == N_SECT &&\
-	 !through_seg("__data", arg->lc, arg->nlist64->n_sect, arg->ncmds)
-	 && !through_seg("__text", arg->lc, arg->nlist64->n_sect, arg->ncmds)
-	 &&	!through_seg("__bss", arg->lc, arg->nlist64->n_sect, arg->ncmds))
-	{
-		print_addr(arg->nlist64, arg->nlist32);
-		if (!arg->ext)
-			ft_putstr("s ");
-		else
-			ft_putstr("S ");
-		ft_putendl(arg->stringtable + arg->nlist32->n_un.n_strx);
-	}
+	if (arg->nlist64 && !is_other_section(arg) && (arg->nlist64->n_type\
+	& N_TYPE) == N_SECT)
+		print_type64('s', arg);
+	if (arg->nlist32 && !is_other_section(arg) && (arg->nlist32->n_type\
+	& N_TYPE) == N_SECT)
+		print_type64('s', arg);
 }	

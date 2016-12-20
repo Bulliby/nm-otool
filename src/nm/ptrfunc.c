@@ -11,45 +11,41 @@ void		setupptrsym(t_ptrsymbols *ptrsym)
 	ptrsym[OTHER] = &other;
 }
 
-static void	put_ptr(uint64_t value, t_bool print64)
-{
-	size_t		len;
-
-	len = nbrlen(value, BASE);
-	if (print64)
-		len = BASE - len;
-	else
-		len = (BASE >> 1) - len;
-	ft_putnchar('0', len);
-	ft_putnbrbase(value, "0123456789abcdef", BASE);
-}
-
-void		print_addr(t_nlist64 *nlist64, t_nlist32 *nlist32)
-{
-	if (nlist64)
-	{
-		if (!nlist64->n_value)
-			ft_putnchar(' ', 16);
-		else
-			put_ptr(nlist64->n_value, true);
-	}
-	else
-	{
-		if (!nlist32->n_value)
-			ft_putnchar(' ', 8);
-		else
-			put_ptr(nlist64->n_value, false);
-	}
-	ft_putchar(' ');
-}
-
-t_bool				is_stab(uint8_t n_type)
+static t_bool		is_other_field(uint8_t n_type)
 {
 	uint8_t			bit;
 
 	bit = 0x80;
 	if (n_type & bit || n_type & (bit >> 1) || n_type & (bit >> 2))
 		return (true);
+	/*
+	bit = 0x10;
+	if (n_type & bit)
+		return (true);
+	*/
 	return (false);
 }
 
+void				print_type32(char type, t_argfunc *arg)
+{
+	if (is_other_field(arg->nlist32->n_type))
+		return ;
+	print_addr(NULL, arg->nlist32);
+	if (arg->ext)
+		type = ft_toupper(type);
+	ft_putchar(type);
+	ft_putchar(' ');
+	ft_putendl(arg->stringtable + arg->nlist32->n_un.n_strx);
+}
+
+void				print_type64(char type, t_argfunc *arg)
+{
+	if (is_other_field(arg->nlist64->n_type))
+		return ;
+	print_addr(arg->nlist64, NULL);
+	if (arg->ext)
+		type = ft_toupper(type);
+	ft_putchar(type);
+	ft_putchar(' ');
+	ft_putendl(arg->stringtable + arg->nlist64->n_un.n_strx);
+}

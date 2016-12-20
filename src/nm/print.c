@@ -6,11 +6,6 @@ static void				parse_nlist64(t_argfunc *arg, t_ptrsymbols *ptrsym)
 	size_t				i;
 
 	i = 0;
-	/*
-	ft_putstr("[2 ");
-	ft_putstr(arg->stringtable + arg->nlist64->n_un.n_strx);
-	ft_putendl("]");
-	*/
 	while (i != SYMBOLS)
 	{
 		ptrsym[i](arg);
@@ -87,7 +82,6 @@ void			print_tab_info32(const void *ptr, const t_symtab *symtab,\
 	stringtable = (void *) ptr + symtab->stroff;
 	while (i != symtab->nsyms)
 	{
-		//printf("[%s]\n", stringtable + nlist[i].n_un.n_strx);
 		i++;
 	}
 }

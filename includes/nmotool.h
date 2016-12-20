@@ -54,7 +54,8 @@ typedef void (*t_ptrsymbols)(t_argfunc *arg);
 */
 void			setupptrsym(t_ptrsymbols *ptrsym);
 void			print_addr(t_nlist64 *nlist64, t_nlist32 *nlist32);
-t_bool			is_stab(uint8_t n_type);
+void			print_type32(char type, t_argfunc *arg);
+void			print_type64(char type, t_argfunc *arg);
 
 /*
 ** ptrsym.c
@@ -68,8 +69,7 @@ void			indirect(t_argfunc	*arg);
 /*
 ** ptrsymsect.c
 */
-t_bool			through_seg(const char *sect, const t_lc *lc, uint8_t index,\
-				uint32_t ncmds);
+t_bool			through_seg(t_argfunc *arg, const char *sect, uint8_t index);
 void			text(t_argfunc	*arg);
 void			data(t_argfunc	*arg);
 void			bbs(t_argfunc	*arg);
