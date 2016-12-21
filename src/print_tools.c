@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_tools.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/12/21 12:51:18 by gwells            #+#    #+#             */
+/*   Updated: 2016/12/21 13:10:32 by gwells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nmotool.h"
 
 static void			base(unsigned char c)
@@ -15,21 +27,21 @@ static void			base(unsigned char c)
 	ft_putchar(stamp[(int)modulo]);
 }
 
-void			put_hexa(const void *ptr, size_t nbbytes)
+void				put_hexa(const void *ptr, size_t nbbytes)
 {
 	while (nbbytes--)
 	{
 		ft_putchar(' ');
 		base(*(unsigned char *)ptr);
 		ptr++;
-	}	
+	}
 	ft_putchar(' ');
 	ft_putchar('\n');
 }
 
-size_t			nbrlen(uint64_t nbr, size_t base)
+size_t				nbrlen(uint64_t nbr, size_t base)
 {
-	size_t count;
+	size_t			count;
 
 	count = 0;
 	while (nbr >= base)

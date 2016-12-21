@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/12/21 13:17:58 by gwells            #+#    #+#             */
+/*   Updated: 2016/12/21 13:21:20 by gwells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nmotool.h"
 #include <mach-o/nlist.h>
 
-static void				parse_nlist(t_argfunc *arg, t_ptrsymbols *ptrsym)
+static void			parse_nlist(t_argfunc *arg, t_ptrsymbols *ptrsym)
 {
-	size_t				i;
+	size_t			i;
 
 	i = 0;
 	while (i != SYMBOLS)
@@ -19,10 +31,10 @@ void				print_tab_info64(const void *ptr, const t_symtab *symtab,\
 	size_t			i;
 	t_argfunc		arg;
 	t_ptrsymbols	ptrsym[SYMBOLS];
-	
+
 	i = 0;
-	arg.nlist64 = (void *) ptr + symtab->symoff;
-	arg.stringtable = (void *) ptr + symtab->stroff;
+	arg.nlist64 = (void *)ptr + symtab->symoff;
+	arg.stringtable = (void *)ptr + symtab->stroff;
 	arg.nlist32 = NULL;
 	arg.ncmds = ncmds;
 	arg.lc = lc;
@@ -30,7 +42,6 @@ void				print_tab_info64(const void *ptr, const t_symtab *symtab,\
 	sort_nlist64(arg.nlist64, arg.stringtable, symtab->nsyms);
 	while (i != symtab->nsyms)
 	{
-		//printf("[%s]\n", (char *)arg.stringtable + arg.nlist64->n_un.n_strx);
 		arg.ext = ((arg.nlist64->n_type & N_EXT) == N_EXT);
 		parse_nlist(&arg, ptrsym);
 		arg.nlist64++;
@@ -46,8 +57,8 @@ void				print_tab_info32(const void *ptr, const t_symtab *symtab,\
 	t_ptrsymbols	ptrsym[SYMBOLS];
 
 	i = 0;
-	arg.nlist32 = (void *) ptr + symtab->symoff;
-	arg.stringtable = (void *) ptr + symtab->stroff;
+	arg.nlist32 = (void *)ptr + symtab->symoff;
+	arg.stringtable = (void *)ptr + symtab->stroff;
 	arg.nlist64 = NULL;
 	arg.ncmds = ncmds;
 	arg.lc = lc;

@@ -1,53 +1,28 @@
-#ifndef NMOTOOL
-# define NMOTOOL
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   nmotool.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/12/21 13:29:12 by gwells            #+#    #+#             */
+/*   Updated: 2016/12/21 13:36:17 by gwells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h> //to remove
-#include <stdlib.h>
-#include <mach-o/fat.h>
-#include <mach-o/loader.h>
-#include <mach-o/nlist.h>
+#ifndef NMOTOOL_H
+# define NMOTOOL_H
 
-#define BASE 16
+# include "libft.h"
+# include "struct.h"
+# include <stdlib.h>
+# include <mach-o/fat.h>
+# include <mach-o/loader.h>
+# include <mach-o/nlist.h>
 
-#define	SYMBOLS	7
+# define BASE 16
 
-typedef enum	e_symbols
-{
-	UNDEFINED	= 0,
-	ABSOLUTE,
-	COMMON,
-	DATA,
-	BBS,
-	TEXT,
-	OTHER
-}				t_symbols;	
-
-typedef struct	stat				t_stat;
-typedef struct	mach_header_64		t_header64;
-typedef struct	mach_header			t_header32;
-typedef struct	fat_header			t_headerfat; 
-typedef struct	fat_arch			t_arch;
-typedef struct	segment_command_64	t_seg64; 
-typedef struct	segment_command		t_seg32; 
-typedef struct	section_64			t_sect64;
-typedef struct	section				t_sect32;
-typedef struct	load_command		t_lc;
-typedef struct	symtab_command		t_symtab;
-typedef	struct	nlist_64			t_nlist64;
-typedef	struct	nlist				t_nlist32;
-
-typedef struct	s_argfunc
-{
-	const t_lc	*lc;
-	t_nlist64	*nlist64;
-	t_nlist32	*nlist32;
-	void		*stringtable;
-	t_bool		ext;
-	uint32_t	ncmds;
-}				t_argfunc;
-
-typedef void (*t_ptrsymbols)(t_argfunc *arg);
+# define SYMBOLS	7
 
 /*
 ** ptrfunc.c
@@ -60,7 +35,7 @@ void			print_type64(char type, t_argfunc *arg);
 /*
 ** ptrsym.c
 */
-void			undefined(t_argfunc *arg);		
+void			undefined(t_argfunc *arg);
 void			absolute(t_argfunc	*arg);
 void			common(t_argfunc	*arg);
 void			other(t_argfunc	*arg);
@@ -88,10 +63,14 @@ void			headerfat(const void *ptr, t_bool islittleendian);
 /*
 ** parse.c
 */
-void			parse32(const void * ptr, const uint32_t ncmds, const t_seg32 *seg);
-void			parse64(const void * ptr, const uint32_t ncmds, const t_seg64 *sef);
-void			parse32nm(const void * ptr, const uint32_t ncmds, const t_lc *lc);
-void			parse64nm(const void * ptr, const uint32_t ncmds, const t_lc *lc);
+void			parse32(const void *ptr, const uint32_t ncmds,\
+				const t_seg32 *seg);
+void			parse64(const void *ptr, const uint32_t ncmds,\
+					const t_seg64 *sef);
+void			parse32nm(const void *ptr, const uint32_t ncmds,\
+				const t_lc *lc);
+void			parse64nm(const void *ptr, const uint32_t ncmds,\
+				const t_lc *lc);
 
 /*
 ** arch.c
@@ -124,6 +103,6 @@ t_bool			is64bit(void);
 /*
 ** sort.c
 */
-void			sort_nlist64(t_nlist64 *tab, char *stringtable,  uint32_t nsyms);
-void			sort_nlist32(t_nlist32 *tab, char *stringtable,  uint32_t nsyms);
+void			sort_nlist64(t_nlist64 *tab, char *stringtable, uint32_t nsyms);
+void			sort_nlist32(t_nlist32 *tab, char *stringtable, uint32_t nsyms);
 #endif

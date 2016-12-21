@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fatheader.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/12/21 13:06:30 by gwells            #+#    #+#             */
+/*   Updated: 2016/12/21 13:06:51 by gwells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nmotool.h"
 #include <mach-o/fat.h>
 
@@ -13,12 +25,12 @@ static void			archfat(const void *ptr, const uint32_t nbarch)
 		if (is64bit() && (bigtolitte(arch->cputype) == CPU_TYPE_X86_64 ||\
 		arch->cputype == CPU_TYPE_X86_64))
 			header64((void*)ptr + bigtolitte(arch->offset));
-		else if (!is64bit() && (arch->cputype == CPU_TYPE_I386 || 
+		else if (!is64bit() && (arch->cputype == CPU_TYPE_I386 ||\
 		bigtolitte(arch->cputype) == CPU_TYPE_I386))
 			header32((void*)ptr + arch->offset);
 		arch = (void*)arch + sizeof(*arch);
 		i++;
-	}	
+	}
 }
 
 void				headerfat(const void *ptr, t_bool islittleendian)

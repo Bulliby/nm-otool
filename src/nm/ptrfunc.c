@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ptrfunc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/12/21 13:21:54 by gwells            #+#    #+#             */
+/*   Updated: 2016/12/21 13:22:27 by gwells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nmotool.h"
 
-void		setupptrsym(t_ptrsymbols *ptrsym)
+void				setupptrsym(t_ptrsymbols *ptrsym)
 {
 	ptrsym[UNDEFINED] = &undefined;
 	ptrsym[ABSOLUTE] = &absolute;
@@ -18,11 +30,6 @@ static t_bool		is_other_field(uint8_t n_type)
 	bit = 0x80;
 	if (n_type & bit || n_type & (bit >> 1) || n_type & (bit >> 2))
 		return (true);
-	/*
-	bit = 0x10;
-	if (n_type & bit)
-		return (true);
-	*/
 	return (false);
 }
 

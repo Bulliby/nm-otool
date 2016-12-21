@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   otool.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/12/21 13:04:03 by gwells            #+#    #+#             */
+/*   Updated: 2016/12/21 13:05:41 by gwells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -18,7 +30,7 @@ static int			map_file(int fd)
 		ft_putendl_fd("fstat error", 2);
 		ret = EXIT_FAILURE;
 	}
-	else 
+	else
 	{
 		if ((ptr = mmap(0, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0))\
 		== MAP_FAILED)
@@ -29,8 +41,7 @@ static int			map_file(int fd)
 		else
 		{
 			ret = check_arch(ptr);
-			if (munmap(ptr, st.st_size) < 0)
-				ft_putendl_fd("munmap failed", 2);
+			munmap(ptr, st.st_size);
 		}
 	}
 	return (ret);
@@ -40,7 +51,7 @@ static int			open_files(char *file)
 {
 	int				ret;
 	int				fd;
-	
+
 	ret = EXIT_SUCCESS;
 	if (((fd = open(file, O_RDONLY)) < 0))
 	{
@@ -49,8 +60,8 @@ static int			open_files(char *file)
 		ret = EXIT_FAILURE;
 	}
 	else
-	   ret = map_file(fd);
-	return (ret);	
+		ret = map_file(fd);
+	return (ret);
 }
 
 static int			hanlde_files(char **argv)
@@ -68,7 +79,7 @@ static int			hanlde_files(char **argv)
 	return (ret);
 }
 
-int			main(int argc, char **argv)
+int					main(int argc, char **argv)
 {
 	if (argc < 2)
 	{
