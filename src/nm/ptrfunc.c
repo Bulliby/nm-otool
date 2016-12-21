@@ -30,7 +30,7 @@ void				print_type32(char type, t_argfunc *arg)
 {
 	if (is_other_field(arg->nlist32->n_type))
 		return ;
-	print_addr(NULL, arg->nlist32);
+	print_addr(NULL, arg->nlist32, type);
 	if (arg->ext)
 		type = ft_toupper(type);
 	ft_putchar(type);
@@ -42,7 +42,7 @@ void				print_type64(char type, t_argfunc *arg)
 {
 	if (is_other_field(arg->nlist64->n_type))
 		return ;
-	print_addr(arg->nlist64, NULL);
+	print_addr(arg->nlist64, NULL, type);
 	if (arg->ext)
 		type = ft_toupper(type);
 	ft_putchar(type);

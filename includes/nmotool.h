@@ -53,7 +53,7 @@ typedef void (*t_ptrsymbols)(t_argfunc *arg);
 ** ptrfunc.c
 */
 void			setupptrsym(t_ptrsymbols *ptrsym);
-void			print_addr(t_nlist64 *nlist64, t_nlist32 *nlist32);
+void			print_addr(t_nlist64 *nlist64, t_nlist32 *nlist32, char type);
 void			print_type32(char type, t_argfunc *arg);
 void			print_type64(char type, t_argfunc *arg);
 
