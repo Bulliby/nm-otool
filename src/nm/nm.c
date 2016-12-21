@@ -47,7 +47,7 @@ static int			map_file(int fd)
 	return (ret);
 }
 
-static int			open_files(char *file)
+static int			open_files(char *file, int argc)
 {
 	int				ret;
 	int				fd;
@@ -61,15 +61,18 @@ static int			open_files(char *file)
 	}
 	else
 	{
-		ft_putendl("");
-		ft_putstr(file);
-		ft_putendl(":");
+		if (argc > 2)
+		{
+			ft_putendl("");
+			ft_putstr(file);
+			ft_putendl(":");
+		}
 		ret = map_file(fd);
 	}
 	return (ret);
 }
 
-static int			hanlde_files(char **argv)
+static int			hanlde_files(char **argv, int argc)
 {
 	int				ret;
 
@@ -77,7 +80,7 @@ static int			hanlde_files(char **argv)
 	argv++;
 	while (*argv)
 	{
-		if (open_files(*argv) == EXIT_FAILURE)
+		if (open_files(*argv, argc) == EXIT_FAILURE)
 			ret = EXIT_FAILURE;
 		argv++;
 	}
@@ -91,5 +94,5 @@ int					main(int argc, char **argv)
 		ft_putendl("Enter a file name");
 		return (EXIT_FAILURE);
 	}
-	return (hanlde_files(argv));
+	return (hanlde_files(argv, argc));
 }

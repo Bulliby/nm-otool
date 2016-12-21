@@ -41,7 +41,8 @@ void				parse32(const void *ptr, const uint32_t ncmds,\
 	i = 0;
 	while (i != ncmds)
 	{
-		if (seg->cmd == LC_SEGMENT && !ft_strcmp(seg->segname, "__TEXT"))
+		if (seg->cmd == LC_SEGMENT && (!ft_strcmp(seg->segname, "__TEXT") ||\
+		((t_header32 *)ptr)->filetype == MH_OBJECT))
 		{
 			nsect = seg->nsects;
 			sect = (void *)seg + sizeof(*seg);
@@ -81,7 +82,8 @@ void				parse64(const void *ptr, const uint32_t ncmds,\
 	i = 0;
 	while (i != ncmds)
 	{
-		if (seg->cmd == LC_SEGMENT_64 && !ft_strcmp(seg->segname, "__TEXT"))
+		if (seg->cmd == LC_SEGMENT_64 && (!ft_strcmp(seg->segname, "__TEXT")\
+		|| ((t_header64 *)ptr)->filetype == MH_OBJECT))
 		{
 			nsect = seg->nsects;
 			sect = (void *)seg + sizeof(*seg);
