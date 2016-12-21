@@ -60,7 +60,11 @@ static int			open_files(char *file)
 		ret = EXIT_FAILURE;
 	}
 	else
+	{
+		ft_putstr(file);
+		ft_putendl(":");
 		ret = map_file(fd);
+	}
 	return (ret);
 }
 

@@ -22,6 +22,7 @@ static void			section32(const void *ptr, const uint32_t nsects, \
 	{
 		if (!ft_strcmp(sect->sectname, "__text"))
 		{
+			ft_putendl("(__TEXT,__text) section");
 			print_section32((void *)ptr + sect->offset, sect->size, \
 			sect->addr);
 		}
@@ -61,6 +62,7 @@ static void			section64(const void *ptr, const uint32_t nsects,\
 	{
 		if (!ft_strcmp(sect->sectname, "__text"))
 		{
+			ft_putendl("(__TEXT,__text) section");
 			print_section64((void *)ptr + sect->offset, sect->size,\
 			sect->addr);
 		}
