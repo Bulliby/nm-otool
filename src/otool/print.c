@@ -6,7 +6,7 @@
 /*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/21 12:53:35 by gwells            #+#    #+#             */
-/*   Updated: 2016/12/21 12:54:00 by gwells           ###   ########.fr       */
+/*   Updated: 2016/12/22 12:11:34 by gwells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,11 @@ void				print_section32(const void *ptr, size_t size,\
 		ptr += BASE;
 		size -= BASE;
 	}
-	put_ptr32(&vmaddr);
-	put_hexa(ptr, size);
+	if (size)
+	{
+		put_ptr32(&vmaddr);
+		put_hexa(ptr, size);
+	}
 }
 
 void				print_section64(const void *ptr, size_t size,\
@@ -58,6 +61,9 @@ void				print_section64(const void *ptr, size_t size,\
 		ptr += BASE;
 		size -= BASE;
 	}
-	put_ptr64(&vmaddr);
-	put_hexa(ptr, size);
+	if (size)
+	{
+		put_ptr64(&vmaddr);
+		put_hexa(ptr, size);
+	}
 }

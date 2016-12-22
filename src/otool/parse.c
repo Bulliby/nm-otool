@@ -6,7 +6,7 @@
 /*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/21 12:54:21 by gwells            #+#    #+#             */
-/*   Updated: 2016/12/21 12:57:56 by gwells           ###   ########.fr       */
+/*   Updated: 2016/12/22 11:48:45 by gwells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void			section32(const void *ptr, const uint32_t nsects, \
 	{
 		if (!ft_strcmp(sect->sectname, "__text"))
 		{
-			ft_putendl("(__TEXT,__text) section");
+			ft_putendl("Contents of (__TEXT,__text) section");
 			print_section32((void *)ptr + sect->offset, sect->size, \
 			sect->addr);
 		}
@@ -63,7 +63,7 @@ static void			section64(const void *ptr, const uint32_t nsects,\
 	{
 		if (!ft_strcmp(sect->sectname, "__text"))
 		{
-			ft_putendl("(__TEXT,__text) section");
+			ft_putendl("Contents of (__TEXT,__text) section");
 			print_section64((void *)ptr + sect->offset, sect->size,\
 			sect->addr);
 		}

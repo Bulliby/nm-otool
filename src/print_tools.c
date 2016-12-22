@@ -6,7 +6,7 @@
 /*   By: gwells <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/21 12:51:18 by gwells            #+#    #+#             */
-/*   Updated: 2016/12/21 13:10:32 by gwells           ###   ########.fr       */
+/*   Updated: 2016/12/22 12:02:04 by gwells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ static void			base(unsigned char c)
 
 void				put_hexa(const void *ptr, size_t nbbytes)
 {
+	ft_putchar('\t');
 	while (nbbytes--)
 	{
-		ft_putchar(' ');
 		base(*(unsigned char *)ptr);
+		ft_putchar(' ');
 		ptr++;
 	}
-	ft_putchar(' ');
 	ft_putchar('\n');
 }
 
