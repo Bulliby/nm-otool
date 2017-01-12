@@ -6,7 +6,7 @@
 #    By: gwells <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/10/07 20:20:41 by gwells            #+#    #+#              #
-#    Updated: 2016/12/14 14:56:25 by gwells           ###   ########.fr        #
+#    Updated: 2017/01/12 15:17:11 by gwells           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJOTOOL	= $(addprefix $(OBJ_PATH), $(TMPOTOOL))
 OBJNM		= $(addprefix $(OBJ_PATH), $(TMPNM))
 OBJNMOTOOL	= $(addprefix $(OBJ_PATH), $(TMPNMOTOOL))
 CC			= gcc
-CFLAGS		= #-Wall -Wextra -Werror 
+CFLAGS		= -Wall -Wextra -Werror 
 INCLUDES	= -I./includes
 LIB			= -L. -lft
 
